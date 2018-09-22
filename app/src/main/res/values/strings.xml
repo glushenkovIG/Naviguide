@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Naviguide</string>
     <string name="title_activity_maps">Map</string>
+    <string name="choose">Выбрать</string>
 </resources>
