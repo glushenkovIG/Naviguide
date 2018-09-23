@@ -3,6 +3,7 @@ package com.example.dmitry.naviguide;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
@@ -34,5 +35,11 @@ public class RoutesListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         recyclerViewSet();
+    }
+
+    public void callRouteActivity(String name) {
+        Intent intent = new Intent(RoutesListActivity.this, RouteActivity.class);
+        intent.putExtra("route_name", name);
+        startActivity(intent);
     }
 }

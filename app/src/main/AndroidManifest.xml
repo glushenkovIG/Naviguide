@@ -40,7 +40,6 @@
             </intent-filter>
         </activity>
 
-
         <activity android:name=".RouteActivity"
             android:theme="@style/AppTheme">
         </activity>
