@@ -3,7 +3,6 @@ package com.example.dmitry.naviguide.adapters;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,10 +51,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.textView.setTypeface(Typeface.createFromAsset(
                 context.getAssets(), "font/lobster.otf"));
 
-        holder.changeBtn.setOnClickListener(new ChangeBtnListener(position));
+        ChangeBtnListener cbl = new ChangeBtnListener(position);
+        holder.changeBtn.setOnClickListener(cbl);
         TypedArray imgs = context.getResources().obtainTypedArray(R.array.pictures);
         int resourceId = context.getResources().getIdentifier(imgs.getString(position), "drawable", context.getPackageName());
         image.setImageResource(resourceId);
+        image.setOnClickListener(cbl);
         imgs.recycle();
     }
 
