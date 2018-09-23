@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RouteActivity extends AppCompatActivity {
@@ -54,13 +55,15 @@ public class RouteActivity extends AppCompatActivity {
     }
     public static class DescrFragment extends Fragment {
         public DescrFragment() {
-
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.descr_fragment, container, false);
+            ImageView img = (ImageView) view.findViewById(R.id.tour);
+            int resourceId = getActivity().getResources().getIdentifier("tour", "drawable", getActivity().getPackageName());
+            img.setImageResource(resourceId);
             ((TextView)view.findViewById(R.id.descr_text)).setText(((RouteActivity)getActivity()).routeName);
             ((TextView)view.findViewById(R.id.descr_text)).setShadowLayer(1.6f,1.5f,1.3f, 0);
             return view;
