@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string-array name="pictures">
+        <item> ancient_dd </item>
+        <item> cultural_dd </item>
+        <item> shopping_dd </item>
+        <item> night_dd </item>
+        <item> parks_dd </item>
+    </string-array>
+</resources>
