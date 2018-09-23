@@ -2,6 +2,7 @@ package com.example.dmitry.naviguide;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -21,6 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -151,7 +153,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         @Override
         public void onLocationChanged(Location location) {
-            /*mLastLocation = location;
+            mLastLocation = location;
     //Showing Current Location Marker on Map
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions();
@@ -165,12 +167,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
             if (mGoogleApiClient != null) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,
                         this);
             }
-            */
+
     }
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
