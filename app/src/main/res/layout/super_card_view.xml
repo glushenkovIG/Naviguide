@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_height="100dp"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="1dp"
+    android:id="@+id/card"
+    android:layout_marginLeft="0dp"
+    android:layout_marginRight="0dp"
+    cardview:cardCornerRadius="0dp"
+    cardview:cardElevation="4dp"
+    style="@style/SuperCardViewStyle"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/some_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="lolkekchburek"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_below="@+id/some_text"
+            android:id="@+id/description"
+            android:text="\n
+                          Описание достопримечательности\n
+                          Описание достопримечательности\n
+                          Описание достопримечательности\n
+                          Описание достопримечательности\n
+                          Описание достопримечательности\n
+                          Описание достопримечательности\n
+                          Описание достопримечательности\n"
+            android:textSize="15sp"/>
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/description"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/some_button"
+            android:background="@drawable/ic_outline_volume_up_24px"/>
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

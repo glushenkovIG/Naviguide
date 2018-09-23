@@ -52,10 +52,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.textView.setTypeface(Typeface.createFromAsset(
                 context.getAssets(), "font/lobster.otf"));
 
-        holder.changeBtn.setOnClickListener(new ChangeBtnListener(position));
+        ChangeBtnListener cbl = new ChangeBtnListener(position);
+        holder.changeBtn.setOnClickListener(cbl);
         TypedArray imgs = context.getResources().obtainTypedArray(R.array.pictures);
         int resourceId = context.getResources().getIdentifier(imgs.getString(position), "drawable", context.getPackageName());
         image.setImageResource(resourceId);
+        image.setOnClickListener(cbl);
         imgs.recycle();
     }
 
