@@ -4,11 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -31,11 +28,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -45,16 +37,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
-    Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
     private GoogleMap mMap;
-    Location location1 = new Location("location1");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        location1.setLatitude(55.7500844);
-        location1.setLongitude(37.5922937);
+
 
 
         super.onCreate(savedInstanceState);
@@ -91,23 +81,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
         }
 
-        LatLng latLng = new LatLng(location1.getLatitude(), location1.getLongitude());
+        setMarker("Улица Старый Арбат",
+                "Cтapый Apбaт — oднa из глaвныx дocтoпpимeчaтeльнocтeй Mocквы, oчeнь пoпyляpнaя cpeди тypиcтoв пeшexoднaя yлицa большим количеством cyвeниpныx лaвoк, кафе и магазинов. На Арбате находится ряд достопримечательностей такие как театр имени Вахтангова, дома известных писателей и поэтов (Пушкина, Андрея Белого) и стена памяти рок-музыканта Виктора Цоя, к которой ежегодно приходят тысячи любителей его творчества дабы почтить память. Магазины здесь на любой вкус - от современных бутиков до кондитерских лавок советского периода, где можно попробовать старые добрые десерты такие как “Птичье молоко”."
+                , new LatLng(55.7496713, 37.5922520));
+        setMarker("Большой николопесковский переулок",
+                "театр Вахтангова",
+                new LatLng(55.7496091, 37.5911241));
+        setMarker("Apartment on Bolshoi Nikolopeskovskyi pereulok 3",
+                "Данный адрес больше не обслуживается booking.com",
+                new LatLng(55.7500970, 37.5893784));
 
-        String title = "This is Title";
-        String subTitle = "This is \nSubtitle";
+        setMarker("Studio Old Arbat",
+                "Апартаменты-студио Old Arbat с гостиной зоной, телевизором с плоским экраном и бесплатным Wi-Fi расположены в Москве, в 200 м от улицы Арбат",
+                new LatLng(55.7492795, 37.5899785));
 
-        //Marker
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.title(title).snippet(subTitle);
+        setMarker("Apartments on Arbat Street",
+                "Апартаменты «На Арбате» с собственной кухней расположены в центре Москвы. Историческая улица Старый Арбат находится всего в 400 метрах, а музей изобразительных искусств имени А.С. Пушкина — в 1 км. К услугам гостей бесплатный WiFi.",
+                new LatLng(55.7490940, 37.5901258));
 
-        markerOptions.position(latLng);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        setMarker("Landmark City Hostel",
+                "Хостел Landmark City расположен на оживленной улице Арбат в историческом центре Москвы. К услугам гостей частный сад, библиотека, лаундж и бесплатный Wi-Fi. В номерах есть место для работы. Гости пользуются общей ванной комнатой с феном.",
+                new LatLng(55.7485560, 37.5892050));
 
+        setMarker("Apartment on Arbat 31",
+                "Апартаменты «На Арбате 31» расположены в Москве, в нескольких шагах от улицы Арбат, в 800 м от Музея изобразительных искусств имени А. С. Пушкина и в 12 минутах ходьбы от храма Христа Спасителя.",
+                new LatLng(55.7497888, 37.5931081));
+
+        setMarker("Lux Apartments - Kaloshin pereulok",
+                "Данный адрес больше не обслуживается booking.com",
+                new LatLng(55.7483431, 37.5923632));
+    }
+
+    private void setMarker(String title, String subTitle, LatLng latLng) {
+        MarkerOptions markerOpt = new MarkerOptions();
+        markerOpt.title(title).snippet(subTitle);
+        markerOpt.position(latLng);
+        markerOpt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(this);
         mMap.setInfoWindowAdapter(adapter);
-
-        mMap.addMarker(markerOptions).showInfoWindow();
+        mMap.addMarker(markerOpt);
     }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -135,9 +149,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
-        }
 //Showing Current Location Marker on Map
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
@@ -150,9 +161,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,
                     this);
@@ -225,10 +235,15 @@ class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
         TextView tvSubTitle = (TextView) view.findViewById(R.id.tv_subtitle);
-
+        ImageView icon = (ImageView) view.findViewById(R.id.icon);
         tvTitle.setText(marker.getTitle());
         tvSubTitle.setText(marker.getSnippet());
 
+        if (marker.getTitle() != null) {
+            if (marker.getTitle().equals("Улица Старый Арбат")) {
+                icon.setImageResource(R.mipmap.arbat_background);
+            }
+        }
         return view;
     }
 }
