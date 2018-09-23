@@ -9,13 +9,17 @@
     tools:context=".MapsActivity"   >
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:text="Demo Button"
+        android:id="@+id/demo_button"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:padding="10dp"
-        android:layout_marginTop="20dp"
-        android:paddingRight="10dp"
-        android:id="@+id/demo_button"/>
+        android:textSize="18sp"
+        android:textColor="#ffffff"
+        android:background="@drawable/mybutton"
+        android:layout_gravity="left|bottom"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="Маршруты" />
+
 
 </fragment>
