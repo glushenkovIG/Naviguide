@@ -12,6 +12,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dmitry.naviguide.R;
 import com.example.dmitry.naviguide.RouteActivity;
@@ -67,6 +68,12 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.ViewHolder> 
             descr = v.findViewById(R.id.description);
 
             v.setOnClickListener(this);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "Помощь аудиогида", Toast.LENGTH_SHORT).show();
+                }
+            });
 
             if (!isViewExpanded) {
                 button.setVisibility(View.GONE);

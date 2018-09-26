@@ -222,7 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void callMainActivity() {
         Intent intent = new Intent(MapsActivity.this, RoutesListActivity.class);
         startActivity(intent);
-        MapsActivity.this.finish();
+        //MapsActivity.this.finish();
     }
 }
 
