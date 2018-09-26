@@ -2,7 +2,6 @@ package com.example.dmitry.naviguide.adapters;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,13 +11,11 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dmitry.naviguide.R;
 import com.example.dmitry.naviguide.RouteActivity;
-import com.example.dmitry.naviguide.RoutesListActivity;
 import com.example.dmitry.naviguide.auxiliary.Site;
 
 public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.ViewHolder> {
