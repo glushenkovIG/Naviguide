@@ -35,7 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public MyAdapter(Context context) {
         this.context = context;
-        routsNames = new String[]{"Древняя Москва",  "Культурная Москва", "Шоппинг в Москве", "Ночная Москва", "Парки Москвы"};
+        routsNames = new String[]{"Древняя Москва",  "Культурная Москва", "Шоппинг в Москве", "Ночная Москва", "Парки Москвы", "Мраморные пещеры Крыма", "Грязевые вулканы Гобустана", "Лучшие граффити Берлина"};
     }
 
     @Override
