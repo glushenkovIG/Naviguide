@@ -10,7 +10,6 @@ import com.example.dmitry.naviguide.adapters.MyAdapter;
 import com.example.dmitry.naviguide.auxiliary.CustomRecyclerView;
 
 public class RoutesListActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

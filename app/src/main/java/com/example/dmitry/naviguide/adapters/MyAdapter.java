@@ -3,6 +3,7 @@ package com.example.dmitry.naviguide.adapters;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,13 @@ import android.widget.TextView;
 
 import com.example.dmitry.naviguide.R;
 import com.example.dmitry.naviguide.RoutesListActivity;
+import com.example.dmitry.naviguide.RoutesSingletone;
+
+import java.util.List;
 
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private String[] routsNames;
+    private List<Pair<String, String>> routsNames;
     private Context context;
     private ImageView image;
 
@@ -34,7 +38,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public MyAdapter(Context context) {
         this.context = context;
-        routsNames = new String[]{"Древняя Москва",  "Культурная Москва", "Шоппинг в Москве", "Ночная Москва", "Парки Москвы", "Мраморные пещеры Крыма", "Грязевые вулканы Гобустана", "Лучшие граффити Берлина"};
+//        routsNames = new String[]{"Центр Москвы", "Древняя Москва",  "Культурная Москва", "Шоппинг в Москве",
+//                                  "Ночная Москва", "Парки Москвы", "Мраморные пещеры Крыма",
+//                                  "Грязевые вулканы Гобустана", "Лучшие граффити Берлина",
+//                                  };
+        routsNames = RoutesSingletone.getInstance().getRoutes();
     }
 
     @Override
@@ -47,17 +55,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.textView.setText(routsNames[position]);
+        holder.textView.setText(routsNames.get(position).first);
         holder.textView.setTypeface(Typeface.createFromAsset(
                 context.getAssets(), "font/lobster.otf"));
 
         ChangeBtnListener cbl = new ChangeBtnListener(position);
         holder.changeBtn.setOnClickListener(cbl);
-        TypedArray imgs = context.getResources().obtainTypedArray(R.array.pictures);
-        int resourceId = context.getResources().getIdentifier(imgs.getString(position), "drawable", context.getPackageName());
+        int resourceId = context.getResources().getIdentifier(routsNames.get(position).second, "drawable", context.getPackageName());
         image.setImageResource(resourceId);
         image.setOnClickListener(cbl);
-        imgs.recycle();
     }
 
 
@@ -71,12 +77,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
             if (context instanceof RoutesListActivity)
-                ((RoutesListActivity) context).callRouteActivity(routsNames[position]);
+                ((RoutesListActivity) context).callRouteActivity(routsNames.get(position).first);
         }
     }
 
     @Override
     public int getItemCount() {
-        return routsNames.length;
+        return routsNames.size();
     }
 }

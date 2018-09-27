@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="pictures">
+        <item> center </item>
         <item> ancient_dd </item>
         <item> cultural_dd </item>
         <item> shopping_dd </item>

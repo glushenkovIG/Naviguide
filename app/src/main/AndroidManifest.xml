@@ -42,7 +42,8 @@
             android:theme="@style/AppTheme">
         </activity>
 
-        <activity android:name=".RoutesListActivity">
+        <activity android:name=".RoutesListActivity"
+            android:theme="@style/AppTheme">
         </activity>
 
     </application>

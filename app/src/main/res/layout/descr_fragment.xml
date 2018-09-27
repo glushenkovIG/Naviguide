@@ -1,34 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        android:textSize="24sp"
-        android:textColor="#ffffff"
-        android:background="@color/colorPrimary"
-        android:layout_gravity="center_horizontal"
-        android:text="Маршруты"
         android:id="@+id/descr_text"/>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
-        <com.example.dmitry.naviguide.auxiliary.SuperRecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/super_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:background="#FFFFFF" />
-
-
-    </android.support.design.widget.CoordinatorLayout>
-
-
-</android.widget.FrameLayout>
+</android.support.constraint.ConstraintLayout>

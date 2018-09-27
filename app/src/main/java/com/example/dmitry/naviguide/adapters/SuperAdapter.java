@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.dmitry.naviguide.R;
 import com.example.dmitry.naviguide.RouteActivity;
+import com.example.dmitry.naviguide.RoutesSingletone;
 import com.example.dmitry.naviguide.auxiliary.Site;
 
 public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.ViewHolder> {
@@ -37,7 +38,7 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final SuperAdapter.ViewHolder holder, final int position) {
-        Site site = ((RouteActivity)context).sites.get(routeName)[position];
+        Site site = RoutesSingletone.getInstance().getSites().get(routeName)[position];
         holder.textView.setText(site.name);
         holder.textView.setTypeface(Typeface.createFromAsset(
                 context.getAssets(), "font/lobster.otf"));
@@ -47,7 +48,7 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return ((RouteActivity)context).sites.get(routeName).length;
+        return RoutesSingletone.getInstance().getSites().get(routeName).length;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
