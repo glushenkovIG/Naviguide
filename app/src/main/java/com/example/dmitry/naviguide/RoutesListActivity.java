@@ -35,9 +35,9 @@ public class RoutesListActivity extends AppCompatActivity {
         recyclerViewSet();
     }
 
-    public void callRouteActivity(String name) {
+    public void callRouteActivity(int index) {
         Intent intent = new Intent(RoutesListActivity.this, RouteActivity.class);
-        intent.putExtra("route_name", name);
+        intent.putExtra("route_index", index);
         startActivity(intent);
     }
 }

@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +37,14 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.HashMap;
@@ -51,7 +55,7 @@ import java.util.concurrent.Executors;
 public class RouteActivity extends AppCompatActivity {
     private SectionsPagerAdapter pagerAdapter;
     private ViewPager viewPager;
-    String routeName = "";
+    Route route;
     MapFragment mapFragment;
     DescrFragment descrFragment;
     SitesFragment sitesFragment;
@@ -69,10 +73,10 @@ public class RouteActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        routeName = getIntent().getStringExtra("route_name");
+        route = RoutesSingletone.getInstance().getRoutes().get(getIntent().getIntExtra("route_index", 0));
         mapFragment = new MapFragment();
         descrFragment = new DescrFragment();
         sitesFragment = new SitesFragment();
@@ -184,12 +188,15 @@ public class RouteActivity extends AppCompatActivity {
             GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener,
             LocationListener, com.example.dmitry.naviguide.MapFragment {
+        private int cur_site_index;
 
         public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
         GoogleApiClient mGoogleApiClient;
         Location mLastLocation;
         LocationRequest mLocationRequest;
         private GoogleMap mMap;
+        Marker[] markers;
+        Polyline[] lines;
 
         public MapFragment() {
 
@@ -207,7 +214,11 @@ public class RouteActivity extends AppCompatActivity {
                     getChildFragmentManager()
                             .findFragmentById(R.id.map_on_fr);
 
+            cur_site_index = 0;
+
             mapFragment.getMapAsync(this);
+
+
             return view;
         }
 
@@ -260,7 +271,17 @@ public class RouteActivity extends AppCompatActivity {
 
         @Override
         public void onLocationChanged(Location location) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14.2f));
+            if (RoutesSingletone.getInstance().getSites().get(((RouteActivity)getActivity()).route.name).length == cur_site_index + 1)
+                return;
+            float res[] = new float[2];
+            LatLng ll = RoutesSingletone.getInstance().getSites().get(((RouteActivity)getActivity()).route.name)[cur_site_index + 1].getLatLng();
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(), ll.latitude, ll.longitude, res);
+            if (res[0] < 100) {
+                ++cur_site_index;
+                markers[cur_site_index].setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                lines[cur_site_index - 1].setColor(Color.GREEN);
+            }
         }
 
         @Override
@@ -284,26 +305,56 @@ public class RouteActivity extends AppCompatActivity {
             }
 
             Site prev = null;
-            for (Site site : RoutesSingletone.getInstance().getSites().get(((RouteActivity) getActivity()).routeName)) {
-                setMarker(site.name, site.name, site.getLatLng());
+            markers = new Marker[RoutesSingletone.getInstance().getSites().get(((RouteActivity) getActivity()).route.name).length];
+            lines = new Polyline[markers.length - 1];
+            cur_site_index = 0;
+            int i = 0;
+
+            for (Site site : RoutesSingletone.getInstance().getSites().get(((RouteActivity) getActivity()).route.name)) {
+                markers[i] = setMarker(site.name, site.name, site.getLatLng(),  cur_site_index == i ? 1 : 0);
                 if (prev != null)
-                    mMap.addPolyline(new PolylineOptions()
-                            .add(prev.getLatLng(), site.getLatLng())
-                            .width(8)
-                            .color(Color.BLUE));
+                    lines[i - 1] = mMap.addPolyline(new PolylineOptions()
+                                .add(prev.getLatLng(), site.getLatLng())
+                                .width(8)
+                                .color(Color.BLUE));
                 prev = site;
+                ++i;
             }
 
+
+            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    mMap.setLocationSource(new LocationSource() {
+                        @Override
+                        public void activate(OnLocationChangedListener onLocationChangedListener) {
+                            Location new_loc = new Location("");
+                            new_loc.setLatitude(latLng.latitude);
+                            new_loc.setLongitude(latLng.longitude);
+                            onLocationChangedListener.onLocationChanged(new_loc);
+                            onLocationChanged(new_loc);
+                        }
+
+                        @Override
+                        public void deactivate() {
+
+                        }
+                    });
+                }
+            });
+
         }
-        private void setMarker(String title, String subTitle, LatLng latLng) {
+        private Marker setMarker(String title, String subTitle, LatLng latLng, int type) {
             MarkerOptions markerOpt = new MarkerOptions();
             markerOpt.title(title).snippet(subTitle);
             markerOpt.position(latLng);
-            markerOpt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            markerOpt.icon(type == 0 ? BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED) :
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
             CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(getActivity());
             mMap.setInfoWindowAdapter(adapter);
-            mMap.addMarker(markerOpt);
+            return mMap.addMarker(markerOpt);
         }
+
 
         protected synchronized void buildGoogleApiClient() {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -350,7 +401,7 @@ public class RouteActivity extends AppCompatActivity {
 
             SuperRecyclerView recycleView = view.findViewById(R.id.super_recycler);
             recycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recycleView.setAdapter(new SuperAdapter(getActivity(), ((RouteActivity) getActivity()).routeName));
+            recycleView.setAdapter(new SuperAdapter(getActivity(), ((RouteActivity) getActivity()).route.name));
 
             return view;
         }
@@ -367,7 +418,12 @@ public class RouteActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.descr_fragment, container, false);
-            ((TextView)view.findViewById(R.id.descr_text)).setText(((RouteActivity)getActivity()).routeName);
+            ((TextView)view.findViewById(R.id.descr_text)).setText(((RouteActivity)getActivity()).route.descr);
+            ((TextView)view.findViewById(R.id.route_name)).setText(String.format("\n%s\n", ((RouteActivity)getActivity()).route.name));
+
+            ImageView image = view.findViewById(R.id.route_image);
+            int id = getActivity().getResources().getIdentifier(((RouteActivity)getActivity()).route.picture, "drawable", getActivity().getPackageName());
+            image.setImageResource(id);
 
             return view;
         }

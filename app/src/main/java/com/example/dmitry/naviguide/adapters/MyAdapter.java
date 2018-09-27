@@ -11,22 +11,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dmitry.naviguide.R;
 import com.example.dmitry.naviguide.RoutesListActivity;
 import com.example.dmitry.naviguide.RoutesSingletone;
+import com.example.dmitry.naviguide.Route;
+
 
 import java.util.List;
 
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private List<Pair<String, String>> routsNames;
+    private List<Route> routes;
     private Context context;
-    private ImageView image;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         Button changeBtn;
+        ImageView image;
 
         ViewHolder(View v) {
             super(v);
@@ -42,7 +45,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 //                                  "Ночная Москва", "Парки Москвы", "Мраморные пещеры Крыма",
 //                                  "Грязевые вулканы Гобустана", "Лучшие граффити Берлина",
 //                                  };
-        routsNames = RoutesSingletone.getInstance().getRoutes();
+        routes = RoutesSingletone.getInstance().getRoutes();
     }
 
     @Override
@@ -55,15 +58,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.textView.setText(routsNames.get(position).first);
+        Route cur_route = routes.get(position);
+        holder.textView.setText(cur_route.name);
         holder.textView.setTypeface(Typeface.createFromAsset(
                 context.getAssets(), "font/lobster.otf"));
 
         ChangeBtnListener cbl = new ChangeBtnListener(position);
         holder.changeBtn.setOnClickListener(cbl);
-        int resourceId = context.getResources().getIdentifier(routsNames.get(position).second, "drawable", context.getPackageName());
-        image.setImageResource(resourceId);
-        image.setOnClickListener(cbl);
+        int resourceId = context.getResources().getIdentifier(cur_route.picture, "drawable", context.getPackageName());
+        holder.image.setImageResource(resourceId);
+        holder.image.setOnClickListener(cbl);
     }
 
 
@@ -77,12 +81,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
             if (context instanceof RoutesListActivity)
-                ((RoutesListActivity) context).callRouteActivity(routsNames.get(position).first);
+                ((RoutesListActivity) context).callRouteActivity(position);
         }
     }
 
     @Override
     public int getItemCount() {
-        return routsNames.size();
+        return routes.size();
     }
 }

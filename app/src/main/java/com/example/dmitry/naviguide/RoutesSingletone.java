@@ -14,7 +14,7 @@ public class RoutesSingletone {
     private static RoutesSingletone instance;
     private Context context;
 
-    List<Pair<String, String>> routes;
+    List<Route> routes;
 
     private HashMap<String, Site[]> sites;
 
@@ -36,7 +36,7 @@ public class RoutesSingletone {
         this.context = context;
     }
 
-    public void loadRoutes(ArrayList<Pair<String, String>> routes) {
+    public void loadRoutes(ArrayList<Route> routes) {
         this.routes = routes;
     }
 
@@ -46,7 +46,7 @@ public class RoutesSingletone {
         this.sites = sites;
     }
 
-    public List<Pair<String, String>> getRoutes() {
+    public List<Route> getRoutes() {
         return routes;
     }
 

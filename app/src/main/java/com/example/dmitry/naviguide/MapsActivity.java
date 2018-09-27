@@ -77,12 +77,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
-                Cursor cursor = db.rawQuery("SELECT rowid, name, picture FROM route", null);
+                Cursor cursor = db.rawQuery("SELECT rowid, name, descr, picture FROM route", null);
                 cursor.moveToFirst();
-                ArrayList<Pair<String, String>> routes = new ArrayList<>();
+                ArrayList<Route> routes = new ArrayList<>();
                 HashMap<String, Site[]> sites = new HashMap<>();
                 do {
-                    routes.add(new Pair<>(cursor.getString(1), cursor.getString(2)));
+                    routes.add(new Route(cursor.getString(1), cursor.getString(2), cursor.getString(3)));
                     Cursor cursor1 = db.rawQuery("SELECT name, descr, lat, lng FROM site WHERE route_id = " + String.valueOf(cursor.getInt(0)), null);
                     cursor1.moveToFirst();
                     ArrayList<Site> sites1 = new ArrayList<>();
@@ -90,7 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         sites1.add(new Site(cursor1.getString(0), cursor1.getString(1), cursor1.getDouble(2), cursor1.getDouble(3)));
                     } while (cursor1.moveToNext());
                     cursor1.close();
-                    sites.put(routes.get(routes.size() - 1).first, sites1.toArray(new Site[sites1.size()]));
+                    sites.put(routes.get(routes.size() - 1).name, sites1.toArray(new Site[sites1.size()]));
                 } while (cursor.moveToNext());
                 cursor.close();
 
@@ -124,14 +124,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override public void onInfoWindowClick(Marker marker) {
                     SQLiteDatabase db = dbHelper.getReadableDatabase();
-                    ArrayList<Pair<String, String>> routes = new ArrayList<>();
+                    ArrayList<Route> routes = new ArrayList<>();
                     HashMap<String, Site[]> sites = new HashMap<>();
                     for (Pair<String, Integer> pair : suggestions.get(new Pair<>(marker.getTitle(), marker.getPosition()))) {
                         int id = pair.second;
-                        Cursor cursor = db.rawQuery("SELECT rowid, name, picture FROM route WHERE rowid = " + String.valueOf(id) +";", null);
+                        Cursor cursor = db.rawQuery("SELECT rowid, name, descr, picture FROM route WHERE rowid = " + String.valueOf(id) +";", null);
                         cursor.moveToFirst();
                         do {
-                            routes.add(new Pair<>(cursor.getString(1), cursor.getString(2)));
+                            routes.add(new Route(cursor.getString(1), cursor.getString(2), cursor.getString(3)));
                             Cursor cursor1 = db.rawQuery("SELECT name, descr, lat, lng FROM site WHERE route_id = " + String.valueOf(cursor.getInt(0)), null);
                             cursor1.moveToFirst();
                             ArrayList<Site> sites1 = new ArrayList<>();
@@ -139,7 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 sites1.add(new Site(cursor1.getString(0), cursor1.getString(1), cursor1.getDouble(2), cursor1.getDouble(3)));
                             } while (cursor1.moveToNext());
                             cursor1.close();
-                            sites.put(routes.get(routes.size() - 1).first, sites1.toArray(new Site[sites1.size()]));
+                            sites.put(routes.get(routes.size() - 1).name, sites1.toArray(new Site[sites1.size()]));
                         } while (cursor.moveToNext());
                         cursor.close();
                     }
@@ -166,7 +166,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
             for (Pair<String, LatLng> site : suggestions.keySet())
-                setMarker(site.first, "", site.second);
+                setMarker(site.first, "\n\nНажмите, чтобы найти все маршруты, проходящие через эту достопримечательность.", site.second);
 
 //            setMarker("Улица Старый Арбат",
 //                    "Cтapый Apбaт — oднa из глaвныx дocтoпpимeчaтeльнocтeй Mocквы, oчeнь пoпyляpнaя cpeди тypиcтoв пeшexoднaя yлицa большим количеством cyвeниpныx лaвoк, кафе и магазинов. На Арбате находится ряд достопримечательностей такие как театр имени Вахтангова, дома известных писателей и поэтов (Пушкина, Андрея Белого) и стена памяти рок-музыканта Виктора Цоя, к которой ежегодно приходят тысячи любителей его творчества дабы почтить память. Магазины здесь на любой вкус - от современных бутиков до кондитерских лавок советского периода, где можно попробовать старые добрые десерты такие как “Птичье молоко”."
