@@ -18,10 +18,11 @@
             android:textStyle="bold"/>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/route_image"
-            android:layout_below="@id/route_name"/>
+            android:layout_below="@id/route_name"
+            android:scaleType="fitCenter"/>
 
         <TextView
             android:layout_width="match_parent"
